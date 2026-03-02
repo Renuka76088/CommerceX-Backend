@@ -2,27 +2,13 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "This is a backend",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",
-  "vercel.json": {
-    "version": 2,
-    "builds": [
-      {
-        "src": "api/index.js",
-        "use": "@vercel/node"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/api/index.js"
-      }
-    ]
-    
-  },
-  "scripts": {
-    "test": "npm start"
-  },
+
+"scripts": {
+  "start": "node server.js",
+  "dev": "nodemon server.js"
+},
   "author": "Renuka",
   "license": "ISC",
   "dependencies": {
