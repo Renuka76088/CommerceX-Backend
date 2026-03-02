@@ -1,0 +1,52 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "This is a backend",
+  "main": "index.js",
+  "type": "module",
+  "vercel.json": {
+    "version": 2,
+    "builds": [
+      {
+        "src": "api/index.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/api/index.js"
+      }
+    ]
+    
+  },
+  "scripts": {
+    "test": "npm start"
+  },
+  "author": "Renuka",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.13.5",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
+    "body-parser": "^2.2.2",
+    "cloudinary": "^2.9.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.2.2",
+    "multer": "^2.0.2",
+    "nodemailer": "^8.0.1",
+    "pdf-lib": "^1.17.1",
+    "pdfkit": "^0.17.2",
+    "razorpay": "^2.9.6",
+    "serverless-http": "^4.0.0",
+    "stream-buffers": "^3.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
