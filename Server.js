@@ -1,5 +1,6 @@
 // ================== ENV ==================
 import dotenv from "dotenv";
+import path from "path";
 dotenv.config();
 
 // ================== CORE ==================
@@ -76,7 +77,7 @@ app.use("/api/categories", CategorydRoutes);
 
 // ================== DEFAULT ==================
 app.get("/", (req, res) => {
-  res.send("🚀 Skinnveda API running successfully");
+  res.send("🚀 CommerceX API running successfully");
 });
 
 // ================== DB + SERVER ==================
