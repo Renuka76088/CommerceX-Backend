@@ -3,18 +3,20 @@ import nodemailer from "nodemailer";
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
-  secure: true, // Port 465 ke liye true
+  secure: true, 
   pool: true,
   auth: {
     user: process.env.GMAIL,
     pass: process.env.PASSWORD,
   },
-  // Railway/Cloud environment ke liye ye settings bohot zaroori hain
+  // 🔥 YE DO LINES SABSE ZAROORI HAIN 🔥
+  family: 4, // Sirf IPv4 use karne ke liye force karega
+  address: "0.0.0.0", 
+  
   tls: {
-    rejectUnauthorized: false, // SSL verification issues bypass karne ke liye
-    minVersion: 'TLSv1.2'
+    rejectUnauthorized: false
   },
-  connectionTimeout: 10000, // 10 seconds tak wait karega connection ka
+  connectionTimeout: 20000, 
 });
 
 export const sendEmail = async (to, otp) => {
@@ -26,14 +28,15 @@ export const sendEmail = async (to, otp) => {
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee;">
           <h2 style="color: #333;">Welcome to CommerceX</h2>
-          <p>Your verification code is: <strong style="color: #4CAF50;">${otp}</strong></p>
+          <p>Your verification code is: <strong style="color: #4CAF50; font-size: 24px;">${otp}</strong></p>
+          <p>This code is valid for 5 minutes.</p>
         </div>
       `,
     });
-    console.log("✅ Actual Delivery Success:", info.response);
+    console.log("✅ Email Delivered Successfully:", info.response);
     return info;
   } catch (err) {
-    // Ye error aapko Railway ke "Logs" tab mein dikhega
-    console.error("❌ REAL ERROR IN BACKGROUND:", err.message);
+    // Ab yahan ENETUNREACH nahi aana chahiye
+    console.error("❌ Final Debug Error:", err.message);
   }
 };
