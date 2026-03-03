@@ -1,34 +1,24 @@
-import nodemailer from "nodemailer";
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendEmail = async (to, otp) => {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    // Pool use karne se connection open rehta hai aur fast response milta hai
-    pool: true,
-    auth: {
-      user: process.env.GMAIL,
-      pass: process.env.PASSWORD,
-    },
-    // TLS settings production ke liye
-    tls: {
-      rejectUnauthorized: false
-    }
-  });
-
   try {
-    // Timeout handle karne ke liye hum ise wrap kar sakte hain
-    const info = await transporter.sendMail({
-      from: `"CommerceX" <${process.env.GMAIL}>`,
-      to,
-      subject: "Verification Code",
-      text: `Your OTP is ${otp}`,
-      html: `<b>Your OTP: ${otp}</b>`,
+    const { data, error } = await resend.emails.send({
+      from: 'onboarding@resend.dev', // Shuruat mein yahi rehne dein
+      to: to,
+      subject: 'OTP Verification',
+      html: `<h1>Your OTP: ${otp}</h1>`,
     });
-    
-    console.log("✅ Mail Sent Success!");
-    return info;
+
+    if (error) {
+      console.error("❌ Resend Error:", error);
+      throw error;
+    }
+
+    console.log("✅ Email sent via Resend API:", data.id);
   } catch (err) {
-    console.error("❌ Mail Error:", err.message);
+    console.error("❌ Final Failure:", err.message);
     throw err;
   }
 };

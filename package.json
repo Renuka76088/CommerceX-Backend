@@ -28,6 +28,7 @@
     "pdf-lib": "^1.17.1",
     "pdfkit": "^0.17.2",
     "razorpay": "^2.9.6",
+    "resend": "^6.9.3",
     "serverless-http": "^4.0.0",
     "stream-buffers": "^3.0.3"
   },
