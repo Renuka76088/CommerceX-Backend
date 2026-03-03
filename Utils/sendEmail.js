@@ -2,32 +2,33 @@ import nodemailer from "nodemailer";
 
 export const sendEmail = async (to, otp) => {
   const transporter = nodemailer.createTransport({
-    // smtp.gmail.com ka direct IPv4 address use kar rahe hain
-    host: "74.125.130.108", 
-    port: 465,
-    secure: true,
+    service: 'gmail',
+    // Pool use karne se connection open rehta hai aur fast response milta hai
+    pool: true,
     auth: {
       user: process.env.GMAIL,
       pass: process.env.PASSWORD,
     },
-    // SSL/TLS issues se bachne ke liye
+    // TLS settings production ke liye
     tls: {
-      servername: "smtp.gmail.com", // Google verify karega ki ye wahi server hai
       rejectUnauthorized: false
     }
   });
 
   try {
+    // Timeout handle karne ke liye hum ise wrap kar sakte hain
     const info = await transporter.sendMail({
       from: `"CommerceX" <${process.env.GMAIL}>`,
       to,
-      subject: "OTP Verification",
-      html: `<h1>Your OTP: ${otp}</h1>`,
+      subject: "Verification Code",
+      text: `Your OTP is ${otp}`,
+      html: `<b>Your OTP: ${otp}</b>`,
     });
-    console.log("✅ Email sent successfully via IPv4 Direct");
+    
+    console.log("✅ Mail Sent Success!");
     return info;
   } catch (err) {
-    console.error("❌ Final Attempt Error:", err.message);
+    console.error("❌ Mail Error:", err.message);
     throw err;
   }
 };
