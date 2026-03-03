@@ -2,32 +2,31 @@ import nodemailer from "nodemailer";
 
 export const sendEmail = async (to, otp) => {
   const transporter = nodemailer.createTransport({
-    // Method A: Direct SMTP Host with Port 465 (More stable for cloud)
     host: "smtp.gmail.com",
     port: 465,
-    secure: true, // Use SSL
+    secure: true, // SSL use karein
     auth: {
       user: process.env.GMAIL,
       pass: process.env.PASSWORD,
     },
-    // Timeout handling
-    connectionTimeout: 15000, 
-    socketTimeout: 15000,
+    // 🔥 YE SABSE IMPORTANT HAI: IPv4 force karne ke liye
+    family: 4, 
+    connectionTimeout: 20000,
+    greetingTimeout: 20000,
   });
 
   try {
     const info = await transporter.sendMail({
       from: `"CommerceX" <${process.env.GMAIL}>`,
       to,
-      subject: "Your Verification Code",
-      html: `<h1>OTP: ${otp}</h1>`,
+      subject: "OTP Verification",
+      html: `<h1>Your OTP: ${otp}</h1>`,
     });
-    console.log("✅ Mail Sent!");
+    console.log("✅ Email sent successfully using IPv4");
     return info;
   } catch (err) {
-    console.error("❌ Email Failed:", err.message);
-    
-    // Agar 465 fail ho, toh backup ke liye 587 try karega (Sirf debug ke liye)
+    // Agar 465 fail ho, toh logs mein details dikhegi
+    console.error("❌ Email Error:", err.message);
     throw err;
   }
 };
