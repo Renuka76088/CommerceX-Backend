@@ -2,17 +2,19 @@ import nodemailer from "nodemailer";
 
 export const sendEmail = async (to, otp) => {
   const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
+    // smtp.gmail.com ka direct IPv4 address use kar rahe hain
+    host: "74.125.130.108", 
     port: 465,
-    secure: true, // SSL use karein
+    secure: true,
     auth: {
       user: process.env.GMAIL,
       pass: process.env.PASSWORD,
     },
-    // 🔥 YE SABSE IMPORTANT HAI: IPv4 force karne ke liye
-    family: 4, 
-    connectionTimeout: 20000,
-    greetingTimeout: 20000,
+    // SSL/TLS issues se bachne ke liye
+    tls: {
+      servername: "smtp.gmail.com", // Google verify karega ki ye wahi server hai
+      rejectUnauthorized: false
+    }
   });
 
   try {
@@ -22,11 +24,10 @@ export const sendEmail = async (to, otp) => {
       subject: "OTP Verification",
       html: `<h1>Your OTP: ${otp}</h1>`,
     });
-    console.log("✅ Email sent successfully using IPv4");
+    console.log("✅ Email sent successfully via IPv4 Direct");
     return info;
   } catch (err) {
-    // Agar 465 fail ho, toh logs mein details dikhegi
-    console.error("❌ Email Error:", err.message);
+    console.error("❌ Final Attempt Error:", err.message);
     throw err;
   }
 };
