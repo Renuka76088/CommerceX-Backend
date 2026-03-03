@@ -80,7 +80,7 @@ app.get("/", (req, res) => {
 });
 
 // ================== DB + SERVER ==================
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 const MONGOURL = process.env.MONGOURL;
 
 mongoose
