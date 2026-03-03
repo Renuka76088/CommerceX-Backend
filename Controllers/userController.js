@@ -1,25 +1,26 @@
 import User from "../Models/User.js";
 import jwt from "jsonwebtoken";
+import { sendEmail } from "../Utils/sendEmail.js";
 
 const generateOTP = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
-// SEND OTP
+// ================= SEND OTP =================
 export const sendOtp = async (req, res) => {
   try {
-    const { mobile, role } = req.body;
+    const { email, role } = req.body;
 
-    if (!mobile || !role) {
-      return res.status(400).json({ message: "Mobile and role required" });
+    if (!email || !role) {
+      return res.status(400).json({ message: "Email and role required" });
     }
 
     const otp = generateOTP();
 
-    let user = await User.findOne({ mobile });
+    let user = await User.findOne({ email });
 
     if (!user) {
-      user = new User({ mobile, role });
+      user = new User({ email, role });
     }
 
     user.otp = otp;
@@ -27,13 +28,11 @@ export const sendOtp = async (req, res) => {
 
     await user.save();
 
-    // ✅ Console me OTP show hoga
-    console.log(`OTP for ${mobile}: ${otp}`);
+    // ✅ EMAIL SEND
+    await sendEmail(email, otp);
 
-    // ✅ Postman me bhi OTP milega (Testing ke liye)
     res.json({
-      message: "OTP Sent Successfully",
-      otp: otp
+      message: "OTP sent to email successfully",
     });
 
   } catch (error) {
@@ -41,13 +40,12 @@ export const sendOtp = async (req, res) => {
   }
 };
 
-
-// VERIFY OTP
+// ================= VERIFY OTP =================
 export const verifyOtp = async (req, res) => {
   try {
-    const { mobile, otp } = req.body;
+    const { email, otp } = req.body;
 
-    const user = await User.findOne({ mobile });
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(400).json({ message: "User not found" });

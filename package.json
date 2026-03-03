@@ -4,11 +4,10 @@
   "description": "This is a backend",
   "main": "server.js",
   "type": "module",
-
-"scripts": {
-  "start": "node Server.js",
-  "dev": "nodemon Server.js"
-},
+  "scripts": {
+    "start": "node Server.js",
+    "dev": "nodemon Server.js"
+  },
   "author": "Renuka",
   "license": "ISC",
   "dependencies": {
