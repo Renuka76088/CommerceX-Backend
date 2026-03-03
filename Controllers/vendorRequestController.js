@@ -1,5 +1,5 @@
 import VendorRequest from "../Models/VendorRequest.js";
-import User from "../models/User.js";
+import User from "../Models/User.js";
 
 export const submitVendorRequest = async (req, res) => {
   try {
