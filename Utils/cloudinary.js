@@ -1,4 +1,4 @@
-import cloudinary from "../config/cloudinary.js";
+import cloudinary from "../Config/cloudinary.js";
 
 // Single file upload
 export const uploadToCloudinary = async (filePath, folder = "mediscript") => {
