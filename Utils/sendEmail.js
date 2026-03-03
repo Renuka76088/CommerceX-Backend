@@ -1,13 +1,20 @@
 import nodemailer from "nodemailer";
 
-// Transporter ko bahar banayein taaki baar-baar naya connection na banana pade
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  pool: true, // Speed badhane ke liye
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true, // Port 465 ke liye true
+  pool: true,
   auth: {
     user: process.env.GMAIL,
     pass: process.env.PASSWORD,
   },
+  // Railway/Cloud environment ke liye ye settings bohot zaroori hain
+  tls: {
+    rejectUnauthorized: false, // SSL verification issues bypass karne ke liye
+    minVersion: 'TLSv1.2'
+  },
+  connectionTimeout: 10000, // 10 seconds tak wait karega connection ka
 });
 
 export const sendEmail = async (to, otp) => {
@@ -23,10 +30,10 @@ export const sendEmail = async (to, otp) => {
         </div>
       `,
     });
-    console.log("✅ Email sent successfully to:", to);
+    console.log("✅ Actual Delivery Success:", info.response);
     return info;
   } catch (err) {
-    console.error("❌ Nodemailer Error Inside sendEmail:", err.message);
-    // Yahan throw mat kariyega agar background mein bhej rahe hain
+    // Ye error aapko Railway ke "Logs" tab mein dikhega
+    console.error("❌ REAL ERROR IN BACKGROUND:", err.message);
   }
 };
